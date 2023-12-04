@@ -1,7 +1,7 @@
 # Processing-eBird-Data-with-R
 Processing eBird Data with R
 
-This repository contains code sets on processing eBird data with R. It is a work in progress; updates and addional files will be added as I progress.
+This repository contains code sets on processing eBird data with R. It is a work in progress; updates and additional files will be added as I progress.
 
 ## Files
 'Processing eBird data code.R'
