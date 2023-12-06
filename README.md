@@ -11,7 +11,10 @@ General code for working with your own eBird data. Includes downloading, cleanin
 Code for creating a species list for a specific region/hotspot.
 
 outputs
-This folder contains species lists for various locations. 
+This folder contains species lists for various locations. They are not needed for running the code.
+
+data
+This folder contains data files exported from eBird. They are not needed for running the code.
 
 ## Please note
 I am using eBird data to teach myself data processing and visualisation with R. Therefore, the code is only as robust as my experience. 

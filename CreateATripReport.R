@@ -1,8 +1,8 @@
-#Creat a species list for hotspots in a location.
-#eBird data for Andalucia, Spain from Jan 2016 - Sept 2023. 
+#Create a species list for eBird checklist hotspots for a specific location.
+#e.g. eBird data for Andalucia, Spain from Jan 2016 - Sept 2023. 
 
 # Download  eBird data.
-##Log into ebird.org and Download data
+##Log into ebird.org to download the data
 ##The dataset will be emailed to you. When it is, download the zip file.
 ##Create a folder on your computer and move the file into this. This folder will be the working directory in R.
 
@@ -16,23 +16,31 @@ library(tidyverse)
 getwd() # See which directory you are currently in
 setwd("C:/Users/filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
-#Import data 
-data <-read.csv("data/Andalucia2016-2022.csv") #eBird files come in Excel, but if your data is in .txt format, use the function:
-# data<-read.delim("ebd_Andalucia.txt", sep ="\t", 
+
+
+# Import data 
+data <-read.csv("filepath.csv") #eBird files come in Excel, but if your data is in .txt format, use the function:
+
+# data<-read.delim("filename.txt", sep ="\t", 
   #           header = T, quote = "", 
   #          stringsAsFactors =F, na.strings =c(""," ", NA))
 
 
-#6. Preliminary exploration of the data
+
+
+# Preliminary exploration of the data
+
 names(data)   # View column names
 head(data)    # View first six rows
 str(data)     # View vector types for columns e.g. character, numeric, integer
 unique(data$COUNTY) #View all Counties listed. unique(data$LOCALITY)
 
 
-#Identify all localities I want and then filter them into a new dataset to save.
-#Filter by COUNTY  
 
+
+# Process the data
+
+#Filter by COUNTY  
 data<- data %>% 
   filter(COUNTY %in% c("Cádiz", "Málaga"))
 
@@ -53,12 +61,13 @@ data <- data %>%
 
 
 #Filter by date. First separate Y, M, and D into own columns
+
 library(lubridate)
 
 data<-data %>% 
   separate(OBSERVATION.DATE, c("Year", "Month", "Day"), "-")  
 
-#Filter for all observations in September 
+#Filter for all observations in a specific month 
 data<-data %>% 
   filter(Month == "09")
 
@@ -70,7 +79,8 @@ data<-data %>%
 #Convert the column Count to a numeric vector
 data$OBSERVATION.COUNT<-as.numeric(data$OBSERVATION.COUNT) # If you get the error "NAs introduced by coercion", you can ignore.
 
-str(data) 
+
+str(data) #To check it has been converted
 
 
 #Rename columns
@@ -86,12 +96,17 @@ names(data) # Check they are renamed
  # distinct(GROUP.IDENTIFIER, .keep_all = TRUE)
 
 
-#Create a file from the new data frame. Can delete the larger one.
-write.csv(data, "AndaluciaBirds.csv", row.names = FALSE)
+#Create and save the smaller data file from the new data frame. Can delete the larger one.
+write.csv(data, "filename.csv", row.names = FALSE)
+
+
+
+# Create lists
 
 #Create a species list
 Species<- data %>% 
   distinct(COMMON.NAME)
+
 
 #Identify checklist localities
 data %>% 
@@ -104,11 +119,11 @@ Guadalhorce<-data %>%
 Guadalhorce<- Guadalhorce %>% 
   distinct(COMMON.NAME, SCIENTIFIC.NAME)
 
-#Create a list of species for a geographic area with multiple checklist localities
-Ronda<-test %>% 
+#Create a list of species for an area with multiple checklist localities
+Ronda<-data %>% 
   filter(LOCALITY %in% c("Sierra de Grazalema PNat--Llanos de Libar, Área General","Ronda--Pueblo" ))
 
-#Create a species list that shows the species for each locality in the Ronda area
+#Create a species list that shows the species for each locality in the area
 Ronda<-Ronda %>%
   distinct(COMMON.NAME, LOCALITY)
 
@@ -133,8 +148,12 @@ Trip<-data %>%
                          "Los Alcornocales PNat--Vega del Puente")) %>% 
   arrange(LOCALITY)
 
-#Change the order of colmuns to show which species can be seen at each locality
+#Change the order of columns to show which species can be seen at each locality
 Locations<- Trip %>% 
   relocate(COMMON.NAME, .after = LOCALITY)
 
-#
+
+# Save the checklists
+write.csv(data, "filename.csv", row.names = FALSE)
+
+
