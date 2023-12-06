@@ -89,6 +89,9 @@ names(data) # Check they are renamed
 #Create a file from the new dataframe and delete the larger one.
 write.csv(data, "AndaluciaBirds.csv", row.names = FALSE)
 
+#Create a species list
+Species<- data %>% 
+  distinct(COMMON.NAME)
 
 #Create a species list for a specific Locality
 Guadalhorce<-data %>% 
@@ -123,7 +126,9 @@ Trip<-data %>%
                          "Lagunas de Camino Colorado",
                          "La Breña y Marismas de Barbate PNat--Área General",
                          "El Palmar--Campiña",
-                         "Los Alcornocales PNat--Vega del Puente")) 
+                         "Los Alcornocales PNat--Vega del Puente")) %>% 
+  arrange(LOCALITY)
 
-Trip<-Trip %>%
-  distinct(COMMON.NAME, LOCALITY)
+#Change the order of colmuns to show which species can be seen at each locality
+test<- Trip %>% 
+  relocate(COMMON.NAME, .after = LOCALITY)
