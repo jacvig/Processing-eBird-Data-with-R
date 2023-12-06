@@ -7,15 +7,15 @@ This repository contains code sets on processing eBird data with R. It is a work
 'Processing eBird data code.R'
 General code for working with your own eBird data. Includes downloading, cleaning, and visualising checklist data.
 
-'CreateATripReport.R'
+'CreateASpeciesList.R'
 Code for creating a species list for a specific region/hotspot.
 
-outputs
+outputs : 
 This folder contains species lists for various locations. They are not needed for running the code.
 
-data
-This folder contains data files exported from eBird. They are not needed for running the code.
+data : 
+This folder contains data files exported from eBird. To run the code, please use your own data or data that you have downloaded from eBird.
 
 ## Please note
 I am using eBird data to teach myself data processing and visualisation with R. Therefore, the code is only as robust as my experience. 
-It will hopefully improve as I learn more about R. 
+It will hopefully improve as I learn more. 
