@@ -17,10 +17,10 @@ getwd() # See which directory you are currently in
 setwd("C:/Users/filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
 #Import data 
-#data <-read.csv("MyEbirdData.csv") #eBird files come in Excel, but if your data is in .txt format, use the function:
-data<-read.delim("ebd_Andalucia.txt", sep ="\t", 
-             header = T, quote = "", 
-             stringsAsFactors =F, na.strings =c(""," ", NA))
+data <-read.csv("data/Andalucia2016-2022.csv") #eBird files come in Excel, but if your data is in .txt format, use the function:
+# data<-read.delim("ebd_Andalucia.txt", sep ="\t", 
+  #           header = T, quote = "", 
+  #          stringsAsFactors =F, na.strings =c(""," ", NA))
 
 
 #6. Preliminary exploration of the data
@@ -86,21 +86,25 @@ names(data) # Check they are renamed
  # distinct(GROUP.IDENTIFIER, .keep_all = TRUE)
 
 
-#Create a file from the new dataframe and delete the larger one.
+#Create a file from the new data frame. Can delete the larger one.
 write.csv(data, "AndaluciaBirds.csv", row.names = FALSE)
 
 #Create a species list
 Species<- data %>% 
   distinct(COMMON.NAME)
 
-#Create a species list for a specific Locality
+#Identify checklist localities
+data %>% 
+  distinct(LOCALITY)
+
+#Create a species list for a specific checklist locality
 Guadalhorce<-data %>% 
   filter(LOCALITY == "Desembocadura del Guadalhorce--Área General")
 
 Guadalhorce<- Guadalhorce %>% 
   distinct(COMMON.NAME, SCIENTIFIC.NAME)
 
-#Create a list of species for an area with multiple localities
+#Create a list of species for a geographic area with multiple checklist localities
 Ronda<-test %>% 
   filter(LOCALITY %in% c("Sierra de Grazalema PNat--Llanos de Libar, Área General","Ronda--Pueblo" ))
 
@@ -109,7 +113,7 @@ Ronda<-Ronda %>%
   distinct(COMMON.NAME, LOCALITY)
 
 
-#Create a species list that shows which locality each species can be seen
+#Create a species list that shows which checklist localities each species can be seen
 Trip<-data %>% 
   filter(LOCALITY %in% c("Desembocadura del Guadalhorce--Área General",
                          "Casares--Castillo",
@@ -130,5 +134,7 @@ Trip<-data %>%
   arrange(LOCALITY)
 
 #Change the order of colmuns to show which species can be seen at each locality
-test<- Trip %>% 
+Locations<- Trip %>% 
   relocate(COMMON.NAME, .after = LOCALITY)
+
+#
