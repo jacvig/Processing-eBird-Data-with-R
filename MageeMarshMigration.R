@@ -23,3 +23,5 @@ data <-read.csv("filepath.csv") #eBird files come in Excel, but if your data is 
   #           header = T, quote = "", 
   #          stringsAsFactors =F, na.strings =c(""," ", NA))
 
+
+#test
