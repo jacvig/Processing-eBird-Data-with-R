@@ -1,5 +1,5 @@
-#Analyse eBird data for a specific location
-#e.g. Spring migration (May), Magee Marsh, Ohio
+#Analyse eBird data for a specific location.
+#e.g. What species are most likely to be seen during Spring migration (May), Magee Marsh, Ohio
 
 # Request and download data from eBird
 # Instructions: https://science.ebird.org/en/use-ebird-data/download-ebird-data-products
