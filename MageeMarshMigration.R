@@ -226,10 +226,9 @@
     Observations <-May |> 
       group_by(common_name) |>  
       summarise(Total = sum(observation_count)) |>  
-      arrange(Total) |> 
-      View()
+      arrange(-Total)
   
-    write.csv(Observations, file = "Observations.csv")
+    write.csv(Observations, file = "MageeMarshObservations.csv")
     
     
     # Explore all records for a specific bird
