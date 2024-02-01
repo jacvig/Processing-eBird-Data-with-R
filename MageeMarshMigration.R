@@ -1,4 +1,4 @@
-#Analyse eBird data for a specific location to see what species are most likely to be seen at a specific time.
+#Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
 #e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see each species across each week in May
 
 # DOWNLOAD DATA
@@ -37,7 +37,7 @@
 
   # Set your working directory
   getwd() # See which directory you are currently in
-  setwd("/filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
+  setwd("filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
   # OR set path with auk if AWK is installed in a non-standard location
   # ?auk_set_awk_path
@@ -92,7 +92,7 @@
 # PROCESS THE DATA
 
   # Select the columns you want to keep
-    Ottawa <- Ottawa %>% 
+    Ottawa <- Ottawa |>  
       select(common_name, 
           scientific_name,
           observation_count, 
@@ -109,7 +109,11 @@
   # Check the column vectors
     str(Ottawa) 
 
-
+  # Remove NAs from counts
+    Ottawa<- Ottawa |> 
+      drop_na(observation_count)
+    
+    
   # Filter by specific location(s). 
      # See all localities
      unique(Ottawa$locality)
@@ -117,7 +121,7 @@
   # I want only checklists from the Magee Marsh area, but there are a lot of localities with various names.
   # I will filter by multiple strings, that is, those localities containing specific words
 
-    Ottawa<- Ottawa %>% 
+    Ottawa<- Ottawa |>  
       filter(grepl("Ottawa NWR|Magee Marsh|Turtle|Black|Strange", locality)) #Be aware that spaces are counted in strings.
     
     # Otherwise, I could have filterd by a single locality
@@ -132,7 +136,7 @@
 
   # Convert Data column to three separate columns for day, month, year
      
-    Ottawa <-Ottawa %>% 
+    Ottawa <-Ottawa |>  
       separate(observation_date, c("Year", "Month", "Day"), "-")   # "-" This is the separator used in the dataframe
   
     Ottawa<- Ottawa |> 
@@ -146,7 +150,7 @@
 
   # For years 2019, 2021, 2022, 2023
   # Create a data frame for these years
-    Unleap<-Ottawa %>% 
+    Unleap<-Ottawa |>  
       filter(Year %in% c(2019, 2021, 2022, 2023))
 
   # Create two objects
@@ -155,7 +159,7 @@
 
 
   # Split the Date and add the new column with values
-    Unleap<-Unleap %>% 
+    Unleap<-Unleap |>  
       mutate(Date = as.Date(Date),   #The column Date needs to be in the data for this to work.
          Year = year(Date),
          Month = month(Date),
@@ -166,14 +170,14 @@
 
 
   # Do the same for 2020. Separate 2020 as its own data frame
-    Leap<-Ottawa %>% 
+    Leap<-Ottawa |>  
       filter(Year == 2020)
 
     dayleap = c(31,29,31,30,31)  # February 2020 needs 29 days 
     cdayleap = c(0,32,60,91,121) #Each month thereafter will be +1 days
 
   # Add columns and values into the data frame
-    Leap<- Leap %>% 
+    Leap<- Leap |>  
     mutate(Date = as.Date(Date),
          Year = year(Date),
          Month = month(Date),
@@ -189,10 +193,93 @@
 # EXPLORE DATA
 
   # Total number of species
-    length(unique(May$common_name)) # 269 species
+    length(unique(test$common_name)) # 269 species
     
   # View list of unique species
     unique(May$common_name)
   
   
+    # Create a species list
+    Species<- May |>  
+      distinct(common_name)
+
+    write.csv(x = Species, file = "MageeMarshSpecies.csv")
     
+
+
+    
+# ANALYSE THE DATA
+    
+    # Which years reported had the most species?
+    May |> 
+      group_by(Year) |>  
+      summarise(species = n_distinct(common_name))
+    
+     # 1  2019     238
+     # 2  2020     217
+     # 3  2021     238
+     # 4  2022     243
+     # 5  2023     232
+    
+    # Which species were reported most and which species least? i.e. total number of observations for each species
+    # Or, which birds am I most likely to see?
+    Observations <-May |> 
+      group_by(common_name) |>  
+      summarise(Total = sum(observation_count)) |>  
+      arrange(Total) |> 
+      View()
+  
+    write.csv(Observations, file = "Observations.csv")
+    
+    
+    # Explore all records for a specific bird
+    May |>  
+      filter(common_name == "Kirtland's Warbler") %>% 
+      View()
+    
+    
+    # Average duration of a checklist
+    May |>  
+      drop_na(duration_minutes) |>  
+      summarise(Average = mean(duration_minutes)) # 102 minutes
+    
+    # See the range of distributions. Use a histogram for time and scale data.
+    May |> 
+      drop_na(duration_minutes) |> 
+      ggplot(mapping = aes(x= duration_minutes))+
+      geom_histogram()
+    
+    # Remove extremes i.e. Select checklists less than 6 hours 
+    May |> 
+      drop_na(duration_minutes) |> 
+      filter(duration_minutes < 360) |> 
+      ggplot(mapping = aes(x = duration_minutes))+
+      geom_histogram()
+    
+    
+    # Average distance of a checklist (having removed extreme outliers)
+    May |>  
+      drop_na(effort_distance_km) |>  
+      filter(effort_distance_km < 15) |> 
+      summarise(Average = mean(effort_distance_km)) # 3.84 km
+    
+    # Visualise the range (and remove extremes)
+    May |> 
+      drop_na(effort_distance_km) |> 
+      filter(effort_distance_km <15) |> 
+      ggplot(mapping = aes(x= effort_distance_km))+
+      geom_histogram()
+    
+    
+    
+    # Which time of day has the highest number of species?
+    # Or, when will I likely see the most species?
+    
+   May |> 
+   filter(Year == "2022") |> 
+     filter(duration_minutes <360) |> 
+     filter(effort_distance_km < 15) |> 
+   group_by(common_name) |> 
+   ggplot(mapping = aes(x = time_observations_started))+
+   geom_bar()
+  # This may not be entirely useful as some checklists are many hours. Additionally, I would want to group the times incrimentally.
