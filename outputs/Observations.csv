@@ -1,0 +1,270 @@
+"","common_name","Total"
+"1","Bell's Vireo",1
+"2","Golden-winged x Blue-winged Warbler (hybrid)",1
+"3","House/Purple Finch",1
+"4","Laughing Gull",1
+"5","Muscovy Duck x Mallard (hybrid)",1
+"6","Red-legged Partridge",1
+"7","Whimbrel",1
+"8","Barn Owl",2
+"9","Curlew Sandpiper",2
+"10","Lesser Black-backed Gull",2
+"11","Yellow-throated Warbler",2
+"12","Evening Grosbeak",3
+"13","Barred Owl",4
+"14","Brewster's Warbler (hybrid)",4
+"15","Horned/Eared Grebe",4
+"16","Louisiana Waterthrush",4
+"17","Mallard x American Black Duck (hybrid)",4
+"18","Western Meadowlark",4
+"19","Common Goldeneye",5
+"20","Northern Bobwhite",6
+"21","American Avocet",7
+"22","Fox Sparrow",7
+"23","Graylag Goose",8
+"24","Red-necked Phalarope",8
+"25","Stilt Sandpiper",8
+"26","Rough-legged Hawk",9
+"27","Black Vulture",10
+"28","Lark Sparrow",10
+"29","Blue Grosbeak",11
+"30","Sharp-shinned/Cooper's Hawk",11
+"31","Canvasback",12
+"32","Kentucky Warbler",12
+"33","Common/Red-breasted Merganser",14
+"34","Franklin's Gull",15
+"35","King Rail",16
+"36","Snow Goose",17
+"37","Yellow-billed/Black-billed Cuckoo",18
+"38","Yellow-headed Blackbird",19
+"39","Pileated Woodpecker",20
+"40","Louisiana/Northern Waterthrush",22
+"41","Dickcissel",26
+"42","Sanderling",26
+"43","Swainson's Hawk",29
+"44","American Tree Sparrow",31
+"45","Neotropic Cormorant",31
+"46","Greater Scaup",32
+"47","Prairie Warbler",33
+"48","Ring-necked Pheasant",33
+"49","Ruby-crowned/Golden-crowned Kinglet",35
+"50","Worm-eating Warbler",35
+"51","Downy/Hairy Woodpecker",37
+"52","Grasshopper Sparrow",37
+"53","Western Cattle Egret",42
+"54","Merlin",44
+"55","Wild Turkey",44
+"56","Clay-colored Sparrow",45
+"57","Kirtland's Warbler",45
+"58","Connecticut Warbler",48
+"59","White-rumped Sandpiper",50
+"60","Great Black-backed Gull",51
+"61","Dark-eyed Junco",53
+"62","Golden-crowned Kinglet",54
+"63","Bobolink",58
+"64","Cerulean Warbler",58
+"65","Glossy/White-faced Ibis",59
+"66","Olive-sided Flycatcher",66
+"67","Black Tern",67
+"68","Redhead",67
+"69","Wilson's Phalarope",67
+"70","Yellow-breasted Chat",67
+"71","Common Loon",72
+"72","Horned Grebe",72
+"73","Pine Siskin",74
+"74","Winter Wren",74
+"75","Brown Creeper",81
+"76","Forster's/Common Tern",87
+"77","Summer Tanager",89
+"78","Common Merganser",90
+"79","Marbled Godwit",90
+"80","Sedge Wren",92
+"81","American Bittern",94
+"82","Greater/Lesser Scaup",95
+"83","Least Bittern",105
+"84","Acadian Flycatcher",109
+"85","Red-shouldered Hawk",113
+"86","American Black Duck",114
+"87","Golden-winged Warbler",115
+"88","Peregrine Falcon",116
+"89","Willet",118
+"90","Yellow-bellied Sapsucker",118
+"91","Long-billed Dowitcher",148
+"92","Alder/Willow Flycatcher (Traill's Flycatcher)",150
+"93","Ruddy Turnstone",152
+"94","Orange-crowned Warbler",154
+"95","Yellow-bellied Flycatcher",159
+"96","Trumpeter/Tundra Swan",166
+"97","Wilson's Snipe",175
+"98","Bufflehead",191
+"99","Ring-necked Duck",217
+"100","Short-billed/Long-billed Dowitcher",221
+"101","Hooded Warbler",227
+"102","Northern Mockingbird",227
+"103","Yellow-billed Cuckoo",237
+"104","Henslow's Sparrow",247
+"105","Alder Flycatcher",266
+"106","Northern Harrier",270
+"107","Black-necked Stilt",275
+"108","Black-billed Cuckoo",290
+"109","White-eyed Vireo",298
+"110","Purple Finch",315
+"111","Sharp-shinned Hawk",319
+"112","Rock Pigeon",322
+"113","Eastern Whip-poor-will",335
+"114","Yellow-throated Vireo",338
+"115","Broad-winged Hawk",343
+"116","Gray-cheeked Thrush",350
+"117","Northern Pintail",393
+"118","Belted Kingfisher",432
+"119","Mourning Warbler",446
+"120","Eastern Towhee",463
+"121","Pine Warbler",467
+"122","Virginia Rail",483
+"123","Blue-winged Warbler",485
+"124","Savannah Sparrow",501
+"125","American Kestrel",513
+"126","Black-crowned Night Heron",549
+"127","Hairy Woodpecker",559
+"128","Philadelphia Vireo",581
+"129","Common Nighthawk",591
+"130","Rusty Blackbird",591
+"131","Eastern Meadowlark",637
+"132","Eastern Screech-Owl",667
+"133","American Pipit",690
+"134","Lincoln's Sparrow",752
+"135","Hermit Thrush",756
+"136","Eastern Bluebird",767
+"137","American Wigeon",809
+"138","Great Horned Owl",845
+"139","Green-winged Teal",845
+"140","American Woodcock",853
+"141","Red-breasted Merganser",869
+"142","Cooper's Hawk",910
+"143","Ruddy Duck",978
+"144","Canada Warbler",1023
+"145","Mute Swan",1033
+"146","Lesser/Greater Yellowlegs",1037
+"147","Horned Lark",1057
+"148","Hooded Merganser",1077
+"149","Wood Thrush",1151
+"150","Wilson's Warbler",1205
+"151","Orchard Oriole",1218
+"152","Ovenbird",1241
+"153","Northern Waterthrush",1256
+"154","Glossy Ibis",1296
+"155","Blue-headed Vireo",1310
+"156","American Golden-Plover",1387
+"157","Northern Shoveler",1476
+"158","Semipalmated Sandpiper",1571
+"159","Pectoral Sandpiper",1590
+"160","Ruby-throated Hummingbird",1616
+"161","Solitary Sandpiper",1619
+"162","Red-breasted Nuthatch",1665
+"163","Brown Thrasher",1683
+"164","Veery",1685
+"165","Field Sparrow",1746
+"166","Red-headed Woodpecker",1814
+"167","Bank Swallow",1924
+"168","Willow Flycatcher",1925
+"169","Eastern Wood-Pewee",1952
+"170","Scarlet Tanager",1955
+"171","Snowy Egret",1961
+"172","Eastern Phoebe",1980
+"173","Spotted Sandpiper",2015
+"174","Blackpoll Warbler",2058
+"175","Forster's Tern",2097
+"176","Carolina Wren",2141
+"177","Least Flycatcher",2259
+"178","American Crow",2346
+"179","Green Heron",2377
+"180","Cliff Swallow",2401
+"181","Lesser Scaup",2483
+"182","Short-billed Dowitcher",2641
+"183","White-breasted Nuthatch",2716
+"184","Swamp Sparrow",2797
+"185","Sora",2814
+"186","Tufted Titmouse",2928
+"187","Red-tailed Hawk",2939
+"188","Black-bellied Plover",3077
+"189","Common Gallinule",3137
+"190","Prothonotary Warbler",3310
+"191","House Finch",3376
+"192","Great Crested Flycatcher",3461
+"193","Black-and-white Warbler",3524
+"194","Red-eyed Vireo",3609
+"195","Chipping Sparrow",3616
+"196","Least Sandpiper",3635
+"197","Blackburnian Warbler",3870
+"198","Black-throated Blue Warbler",3873
+"199","Cedar Waxwing",3886
+"200","Common Tern",3954
+"201","Swainson's Thrush",4035
+"202","Cape May Warbler",4089
+"203","Black-capped Chickadee",4267
+"204","Greater Yellowlegs",4471
+"205","Rose-breasted Grosbeak",4502
+"206","Northern Rough-winged Swallow",4511
+"207","Chimney Swift",4566
+"208","Nashville Warbler",4662
+"209","Gadwall",4703
+"210","Tennessee Warbler",4704
+"211","Northern Parula",4795
+"212","Black-throated Green Warbler",4816
+"213","Pied-billed Grebe",4890
+"214","Chestnut-sided Warbler",5116
+"215","Northern Flicker",5144
+"216","Marsh Wren",5581
+"217","Red-bellied Woodpecker",5841
+"218","Blue-winged Teal",6334
+"219","White-crowned Sparrow",6396
+"220","Bay-breasted Warbler",6484
+"221","Downy Woodpecker",6656
+"222","Indigo Bunting",6991
+"223","Magnolia Warbler",7179
+"224","Semipalmated Plover",7263
+"225","American Redstart",8473
+"226","Blue-gray Gnatcatcher",10161
+"227","Ruby-crowned Kinglet",10494
+"228","Mourning Dove",10566
+"229","American Coot",10581
+"230","House Sparrow",10670
+"231","Eastern Kingbird",10807
+"232","Wood Duck",11061
+"233","Lesser Yellowlegs",11172
+"234","Sandhill Crane",11351
+"235","Palm Warbler",12154
+"236","Turkey Vulture",14088
+"237","White-throated Sparrow",14400
+"238","Herring Gull",14947
+"239","Bonaparte's Gull",15113
+"240","Common Yellowthroat",15241
+"241","American White Pelican",15256
+"242","Brown-headed Cowbird",16518
+"243","Warbling Vireo",16614
+"244","American Goldfinch",16880
+"245","House Wren",17680
+"246","Song Sparrow",20534
+"247","Baltimore Oriole",22396
+"248","Northern Cardinal",24121
+"249","Killdeer",24392
+"250","Yellow-rumped Warbler",26187
+"251","Mallard",27049
+"252","Ring-billed Gull",29578
+"253","Gray Catbird",30063
+"254","Bald Eagle",31305
+"255","Great Blue Heron",31538
+"256","European Starling",38303
+"257","Barn Swallow",49079
+"258","American Robin",54659
+"259","Double-crested Cormorant",55494
+"260","Common Grackle",57052
+"261","Trumpeter Swan",61932
+"262","Great Egret",69206
+"263","Yellow Warbler",86099
+"264","Purple Martin",106143
+"265","Dunlin",165810
+"266","Tree Swallow",186655
+"267","Blue Jay",189750
+"268","Canada Goose",290712
+"269","Red-winged Blackbird",307036
