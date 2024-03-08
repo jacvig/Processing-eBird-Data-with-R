@@ -214,15 +214,20 @@
         drop_na(observation_count)
       
     # Total number of each species
-    Magee |> 
+    SpeciesList<- Magee |> 
       group_by(common_name) |>  
       summarise(Total = sum(observation_count)) |>  
       arrange(-Total)
-      
+    
+    write.csv(SpeciesList, file = "outputs/MageeSpeciesList.csv") 
       
     # Explore all records for a specific species
     Magee |>  
       filter(common_name == "Kirtland's Warbler") |> 
+      View()
+    
+    Magee |> 
+      filter(common_name == "Blackburnian Warbler") |> 
       View()
     
     # Most common duration of checklist i.e. mean
@@ -360,7 +365,8 @@
 Kirtlands<-Ohiozf |> 
   filter(scientific_name == "Setophaga kirtlandii") # Remember, many of these "observations" are absences
     
-    
+BlackBurn<- Ohiozf |> 
+  filter(scientific_name == "Setophaga fusca")
     
   # Time of day
     # summarize data by hourly bins
@@ -404,7 +410,7 @@ Kirtlands<-Ohiozf |>
     grid.arrange(g_tod_hist, g_tod_freq)
   
 
-    # Checklists are distributed between the normal hours of daylight (i.e. 8.00-19.00) with highest number in the afternoon.
+    # For KW, checklists are distributed between the normal hours of daylight (i.e. 8.00-19.00) with highest number in the afternoon.
     # Detection of KW seems to be highest late morning and midday. NB, there are very few KW sightings, so this will affect the model.
     
     
