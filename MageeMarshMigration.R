@@ -1,5 +1,11 @@
-#Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
-#e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see each species across each week in May
+# Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
+# e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see each species across each week in May
+
+# This code is adapted from Chapter 2, eBird Data of:
+# Strimas-Mackey, M., W.M. Hochachka, V. Ruiz-Gutierrez, O.J. Robinson, E.T. Miller, 
+# T. Auer, S. Kelling, D. Fink, A. Johnston. 2023. Best Practices for Using eBird Data. 
+# Version 2.0. https://ebird.github.io/ebird-best-practices/. Cornell Lab of Ornithology, 
+# Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
 
 # DOWNLOAD DATA
   # Request and download data from eBird
@@ -35,11 +41,12 @@
   library(auk)       # To work with huge eBird datasets
   library(lubridate) # To work with dates
   library(sf)
+  library(gridExtra) # To plot the histogram
   
   
   # Set your working directory
   getwd() # See which directory you are currently in
-  setwd("filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
+  setwd("C:/Users/jacvig/OneDrive - The University of Liverpool/R/Processing-eBird-Data-with-R/data/ebd_US-OH_201905_202305_smp_relDec-2023") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
   # OR set path with auk if AWK is installed in a non-standard location
   # auk::auk_set_awk_path("/filepath", overwrite = TRUE)
@@ -55,7 +62,7 @@
   # Inspect the files
   ebd_top<-read_tsv("ebd_US-OH_201905_202305_smp_relDec-2023.txt", n_max = 5)
   
-  # A. Filter before importing the observation data (EBD)
+# A. Filter before importing the observation data (EBD)
   auk_ebd("ebd_US-OH_201905_202305_smp_relDec-2023.txt") |>   # use auk_sampling for the SED file
     # auk_county("Ottawa") |>                         # I couldn't get this filter to work. So I ran this afterwards.
     auk_date(c("*-05-01", "*-05-31")) |>              # filter by a specific date range or choose specific dates across all years e.g. only checklists from May.
@@ -87,7 +94,7 @@
   
           
           
-  # B. Import data and then filter.
+# B. Import data and then filter.
 
   # Import checklist data (SED)
     f_sed <- "ebd_US-OH_201905_202305_smp_relDec-2023_sampling.txt"
@@ -126,21 +133,148 @@
           observations<- read.csv(file = "observations.csv") 
       
      
-
-# Combine observation and checklist data by removing observations without matching checklists
-    # use semi_join to keep only columns from the observations dataset.
-    # use inner_join to keep columns from both datasets. I have used this.
+  # Combine observation and checklist data by removing observations without matching checklists
+          # use semi_join to keep only columns from the observations dataset.
+          # use inner_join to keep columns from both datasets.
+    # NB. This data frame will be used later to visualise the data later. See PRESENCE/ABSENCE ANAYLYSIS
     df <- semi_join(observations, checklists, by = "checklist_id") 
+
+    # write.csv(df, file = "df.csv")
     
-    write.csv(df, file = "df.csv")
     
-      # Optional. Combine and zerofill observation and checklist data. Shows presence/absence for a species
-      # NB this only works if both dataframes have been filtered the same.
-         zf <- auk_zerofill(df, checklists, collapse = TRUE)
  
-         
-         write.csv(zf, file = "zf.csv")
-         zf<- read.csv(file = "zf.csv")
+       
+#Filter by specific location(s). 
+    # See all localities
+    unique(observations$locality)
+    
+    # I want only checklists from the Magee Marsh area, but there are a lot of sub-localities with various names.
+    # I will filter by multiple strings, that is, those localities containing specific words
+    
+    Magee<- observations |>  
+      filter(grepl("Maumee Bay|Howard Marsh|Metzger Marsh|Ottawa NWR|Magee Marsh|Turtle|Black|Strange", locality)) #Be aware that spaces are counted in strings.
+    
+    # Otherwise, I could have filtered by a single locality
+      # df<- df |> 
+      # filter(locality == "Magee Marsh")
+    
+
+      
+ # Create Species List
+
+  # Total number of species
+    length(unique(Magee$common_name)) # 247
+    
+  # View list of unique species
+    unique(Magee$common_name)
+  
+  
+    # Create a species list
+    Species<- Magee |>  
+      distinct(common_name)
+    
+    write.csv(x = Species, file = "MageeMarshSpecies.csv")
+       
+    
+
+# EXPLORE THE DATA
+  # Convert Data column to three separate columns for day, month, year
+    
+  Magee <-Magee |>  
+    separate(observation_date, c("Year", "Month", "Day"), "-")   # "-" This is the separator used in the dataframe
+    
+  # Magee<- Magee |> 
+    unite(Date,5:7, remove = FALSE, sep = "-") #Use remove = TRUE to remove the separate columns
+    
+    
+    
+  # Which years reported had the most species?
+      Magee |> 
+        group_by(Year) |>  
+        summarise(species = n_distinct(common_name))
+      
+      # 1 2019      215
+      # 2 2020      193
+      # 3 2021      224
+      # 4 2022      225
+      # 5 2023      218
+      
+  # Which species were reported most and which species least? i.e. total number of observations for each species
+  # Or, which birds am I most likely to see?
+      
+    # Convert the column Count to a numeric vector
+      Magee$observation_count<-as.numeric(Magee$observation_count) # If you get the error "NAs introduced by coercion", you can ignore.
+      
+      # Check the column vectors
+      str(Magee) 
+      
+      # Find and remove NAs from counts
+      which(is.na(Magee$observation_count), arr.ind=TRUE)
+      Magee<- Magee |> 
+        drop_na(observation_count)
+      
+    # Total number of each species
+    Magee |> 
+      group_by(common_name) |>  
+      summarise(Total = sum(observation_count)) |>  
+      arrange(-Total)
+      
+      
+    # Explore all records for a specific species
+    Magee |>  
+      filter(common_name == "Kirtland's Warbler") |> 
+      View()
+    
+    # Most common duration of checklist i.e. mean
+    Magee |>  
+      drop_na(duration_minutes) |>  
+      summarise(Length = median(duration_minutes)) # 90 minutes
+    
+    # Average duration of a checklist i.e. median
+    Magee |>  
+      drop_na(duration_minutes) |>  
+      summarise(Average = mean(duration_minutes)) # 113 minutes
+    
+    # Average distance of a checklist (having removed extreme outliers)
+    Magee |>  
+      drop_na(effort_distance_km) |>  
+      filter(effort_distance_km < 15) |> 
+      summarise(Average = mean(effort_distance_km)) # 4.45 km
+
+    
+# VISUALISE THE DATA
+    # Range of distributions for duration. Use a histogram for time scale data.
+    Magee |> 
+      drop_na(duration_minutes) |> 
+      ggplot(mapping = aes(x= duration_minutes))+
+      geom_histogram()
+    
+    # Remove extremes i.e. Select checklists less than 4 hours 
+    Magee |> 
+      drop_na(duration_minutes) |> 
+      filter(duration_minutes < 240) |> 
+      ggplot(mapping = aes(x = duration_minutes))+
+      geom_histogram()
+    
+    
+   # Range of distribution for distance (and remove extremes)
+    Magee |> 
+      drop_na(effort_distance_km) |> 
+      filter(effort_distance_km <15) |> 
+      ggplot(mapping = aes(x= effort_distance_km))+
+      geom_histogram()
+    
+    
+    
+    
+# PRESENCE/ABSENCE ANAYLYSIS
+    
+    # Combine and zerofill observation and checklist data. Shows presence/absence for a species
+      # NB this only works if both dataframes have been filtered the same.
+         zf <- auk_zerofill(df, checklists, collapse = TRUE)   #This removes the common_name, but adds a species_observed variable
+
+         # write.csv(zf, file = "zf.csv")
+        
 
   
   # Process and further filter the data
@@ -160,7 +294,7 @@
     }
     
     # clean up variables
-    observations <- observations |> 
+    zf <- zf |> 
       mutate(
         # convert count to integer and X to NA
         # ignore the warning "NAs introduced by coercion"
@@ -180,42 +314,25 @@
       )
     
     
-  # Optional filtering (I have not used this)
+  # Optional filtering
     # Remove outliers such as extremely long duration, distance, or number of observers
-    df <- df |> 
+    zf <- zf |> 
       filter(protocol_type %in% c("Stationary", "Traveling"),
              effort_hours <= 6,
              effort_distance_km <= 10,
              effort_speed_kmph <= 100,
              number_observers <= 10)
     
-    
-    # Filter by specific location(s). 
-    # See all localities
-    unique(observations$locality)
-    
-    # I want only checklists from the Magee Marsh area, but there are a lot of sub-localities with various names.
-    # I will filter by multiple strings, that is, those localities containing specific words
-    
-    df<- df |>  
-      filter(grepl("Maumee Bay|Howard Marsh|Metzger Marsh|Ottawa NWR|Magee Marsh|Turtle|Black|Strange", locality.x)) #Be aware that spaces are counted in strings.
-    
-    # Otherwise, I could have filterd by a single locality
-    # df<- df |> 
-    # filter(locality == "Magee Marsh")
-    
-    
-    
-  # Select only the columns I want to keep
-    names(Magee)  
+   # Select only the columns I want to keep
+    names(zf)  
       
     
-    Magee <- Magee |> 
+    Ohiozf <- zf |> 
       select(checklist_id, 
              observer_id, 
              scientific_name,
-             common_name,
              observation_count, 
+             species_observed,
              state_code, 
              county,
              locality, 
@@ -232,32 +349,24 @@
              effort_speed_kmph,
              number_observers)
     
-    write.csv(Magee, file = "Magee.csv")
-    
-  
-    
-    
-        # Miscellaneous processing
-          # Convert the column Count to a numeric vector
-            Ottawa$observation_count<-as.numeric(Ottawa$observation_count) # If you get the error "NAs introduced by coercion", you can ignore.
+    write.csv(Ohiozf, file = "Ohiozf.csv")
+    write.csv(zf, file = "zf.csv")
 
-        # Check the column vectors
-          str(Ottawa) 
 
-        # Remove NAs from counts
-          Ottawa<- Ottawa |> 
-          drop_na(observation_count)
+
  
-  
+# Visualise detections for a specific species e.g. Kirtland's Warbler
 
+Kirtlands<-Ohiozf |> 
+  filter(scientific_name == "Setophaga kirtlandii") # Remember, many of these "observations" are absences
+    
     
     
   # Time of day
     # summarize data by hourly bins
     breaks <- seq(0, 24)
     labels <- breaks[-length(breaks)] + diff(breaks) / 2
-    checklists_time <- observations |> 
-      #select(common_name = "Kirtland's Warbler") 
+    checklists_time <- Kirtlands |> 
       mutate(hour_bins = cut(hours_of_day, 
                              breaks = breaks, 
                              labels = labels,
@@ -293,184 +402,139 @@
     
     # combine
     grid.arrange(g_tod_hist, g_tod_freq)
-    
-    
-    
-    
-    
-    
-    
-    
-    # Preliminary exploration of the data
-    names(Ottawa)   # View column names
-    names(checklists)
-    head(Ottawa)    # View first six rows
-    str(Ottawa)     # View vector types for columns e.g. character, numeric, integer
   
+
+    # Checklists are distributed between the normal hours of daylight (i.e. 8.00-19.00) with highest number in the afternoon.
+    # Detection of KW seems to be highest late morning and midday. NB, there are very few KW sightings, so this will affect the model.
+    
+    
+  # Checklist duration
+    # summarize data by hour long bins
+    breaks <- seq(0, 6)
+    labels <- breaks[-length(breaks)] + diff(breaks) / 2
+    checklists_duration <- Kirtlands |> 
+      mutate(duration_bins = cut(effort_hours, 
+                                 breaks = breaks, 
+                                 labels = labels,
+                                 include.lowest = TRUE),
+             duration_bins = as.numeric(as.character(duration_bins))) |> 
+      group_by(duration_bins) |> 
+      summarise(n_checklists = n(),
+                n_detected = sum(species_observed),
+                det_freq = mean(species_observed))
+    
+    # histogram
+    g_duration_hist <- ggplot(checklists_duration) +
+      aes(x = duration_bins, y = n_checklists) +
+      geom_segment(aes(xend = duration_bins, y = 0, yend = n_checklists),
+                   color = "grey50") +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::comma) +
+      labs(x = "Checklist duration [hours]",
+           y = "# checklists",
+           title = "Distribution of checklist durations")
+    
+    # frequency of detection
+    g_duration_freq <- ggplot(checklists_duration |> filter(n_checklists > 100)) +
+      aes(x = duration_bins, y = det_freq) +
+      geom_line() +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::percent) +
+      labs(x = "Checklist duration [hours]",
+           y = "% checklists with detections",
+           title = "Detection frequency")
+    
+    # combine
+    grid.arrange(g_duration_hist, g_duration_freq)
+    
+    # Majority of checklists are under 1 hour, but longer searches have a higher chance of detecting KW.
+ 
+       
+  # # summarize data by 1 km bins
+    breaks <- seq(0, 10)
+    labels <- breaks[-length(breaks)] + diff(breaks) / 2
+    checklists_dist <- Kirtlands |> 
+      mutate(dist_bins = cut(effort_distance_km, 
+                             breaks = breaks, 
+                             labels = labels,
+                             include.lowest = TRUE),
+             dist_bins = as.numeric(as.character(dist_bins))) |> 
+      group_by(dist_bins) |> 
+      summarise(n_checklists = n(),
+                n_detected = sum(species_observed),
+                det_freq = mean(species_observed))
+    
+    # histogram
+    g_dist_hist <- ggplot(checklists_dist) +
+      aes(x = dist_bins, y = n_checklists) +
+      geom_segment(aes(xend = dist_bins, y = 0, yend = n_checklists),
+                   color = "grey50") +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::comma) +
+      labs(x = "Distance travelled [km]",
+           y = "# checklists",
+           title = "Distribution of distance travelled")
+    
+    # frequency of detection
+    g_dist_freq <- ggplot(checklists_dist |> filter(n_checklists > 100)) +
+      aes(x = dist_bins, y = det_freq) +
+      geom_line() +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::percent) +
+      labs(x = "Distance travelled [km]",
+           y = "% checklists with detections",
+           title = "Detection frequency")
+    
+    # combine
+    grid.arrange(g_dist_hist, g_dist_freq)
+
+    # Majority of observations are from checklists between 2-4 km. 
+    
   
-  # Convert Data column to three separate columns for day, month, year
-     
-    Ottawa <-Ottawa |>  
-      separate(observation_date, c("Year", "Month", "Day"), "-")   # "-" This is the separator used in the dataframe
-  
-    Ottawa<- Ottawa |> 
-      unite(Date,5:7, remove = FALSE, sep = "-") #Use remove = TRUE to remove the separate columns
+  #Number of observers  
+  # summarize data
+    breaks <- seq(0, 10)
+    labels <- seq(1, 10)
+    checklists_obs <- Kirtlands |> 
+      mutate(obs_bins = cut(number_observers, 
+                            breaks = breaks, 
+                            label = labels,
+                            include.lowest = TRUE),
+             obs_bins = as.numeric(as.character(obs_bins))) |> 
+      group_by(obs_bins) |> 
+      summarise(n_checklists = n(),
+                n_detected = sum(species_observed),
+                det_freq = mean(species_observed))
     
+    # histogram
+    g_obs_hist <- ggplot(checklists_obs) +
+      aes(x = obs_bins, y = n_checklists) +
+      geom_segment(aes(xend = obs_bins, y = 0, yend = n_checklists),
+                   color = "grey50") +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::comma) +
+      labs(x = "# observers",
+           y = "# checklists",
+           title = "Distribution of the number of observers")
     
+    # frequency of detection
+    g_obs_freq <- ggplot(checklists_obs |> filter(n_checklists > 100)) +
+      aes(x = obs_bins, y = det_freq) +
+      geom_line() +
+      geom_point() +
+      scale_x_continuous(breaks = breaks) +
+      scale_y_continuous(labels = scales::percent) +
+      labs(x = "# observers",
+           y = "% checklists with detections",
+           title = "Detection frequency")
     
-    
-  # Add a new column that provides the cumulative numerical value for that day of the year.
-  # Because I will want to visualise species presence across the month of May.
-  # 2020 was a leap year, so I will split the data into two data frames, run the modified code on each data frame then knit them together again.
+    # combine
+    grid.arrange(g_obs_hist, g_obs_freq)
 
-
-  # For years 2019, 2021, 2022, 2023
-  # Create a data frame for these years
-    Unleap<-Ottawa |>  
-      filter(Year %in% c(2019, 2021, 2022, 2023))
-
-  # Create two objects
-    days = c(31,28,31,30,31)  # Number of days in each month. I only have May so no need to count the full year.
-    cdays = c(0,31,59,90,120)
-
-
-  # Split the Date and add the new column with values
-    Unleap<-Unleap |>  
-      mutate(Date = as.Date(Date),   #The column Date needs to be in the data for this to work.
-         Year = year(Date),
-         Month = month(Date),
-         Daym = day(Date),
-         Dayc = day(Date) + cdays[Month])
-
-
-
-
-  # Do the same for 2020. Separate 2020 as its own data frame
-    Leap<-Ottawa |>  
-      filter(Year == 2020)
-
-    dayleap = c(31,29,31,30,31)  # February 2020 needs 29 days 
-    cdayleap = c(0,32,60,91,121) #Each month thereafter will be +1 days
-
-  # Add columns and values into the data frame
-    Leap<- Leap |>  
-    mutate(Date = as.Date(Date),
-         Year = year(Date),
-         Month = month(Date),
-         Daym = day(Date),
-         Dayc = day(Date) + cdayleap[Month]) #It doesn't seem to matter that the object dayleap was created.
-
-
-  # Combine the two into a new data frame
-    May <-rbind(Unleap, Leap)
-
-    
-    
-# EXPLORE DATA
-
-  # Total number of species
-    length(unique(May$common_name)) # 269 species
-    
-  # View list of unique species
-    unique(May$common_name)
-  
-  
-    # Create a species list
-    Species<- May |>  
-      distinct(common_name)
-
-    write.csv(x = Species, file = "MageeMarshSpecies.csv")
-    
-
-
-    
-# ANALYSE THE DATA
-    
-    # Which years reported had the most species?
-    May |> 
-      group_by(Year) |>  
-      summarise(species = n_distinct(common_name))
-    
-     # 1  2019     238
-     # 2  2020     217
-     # 3  2021     238
-     # 4  2022     243
-     # 5  2023     232
-    
-    # Which species were reported most and which species least? i.e. total number of observations for each species
-    # Or, which birds am I most likely to see?
-    Observations <-May |> 
-      group_by(common_name) |>  
-      summarise(Total = sum(observation_count)) |>  
-      arrange(-Total)
-  
-    write.csv(Observations, file = "MageeMarshObservations.csv")
-    
-    
-    # Explore all records for a specific bird
-    May |>  
-      filter(common_name == "Kirtland's Warbler") %>% 
-      View()
-    
-    # Most common duration of checklist i.e. mean
-    May |>  
-      drop_na(duration_minutes) |>  
-      summarise(Length = median(duration_minutes)) # 81 minutes
-    
-    # Average duration of a checklist i.e. median
-    May |>  
-      drop_na(duration_minutes) |>  
-      summarise(Average = mean(duration_minutes)) # 102 minutes
-    
-    # See the range of distributions. Use a histogram for time scale data.
-    May |> 
-      drop_na(duration_minutes) |> 
-      ggplot(mapping = aes(x= duration_minutes))+
-      geom_histogram()
-    
-    # Remove extremes i.e. Select checklists less than 4 hours 
-    May |> 
-      drop_na(duration_minutes) |> 
-      filter(duration_minutes < 240) |> 
-      ggplot(mapping = aes(x = duration_minutes))+
-      geom_histogram()
-    
-    
-    # Visualise correlation between duration and species count to estimate optimal time spent in the field.  
-    checklists |> 
-      drop_na(duration_minutes) |> 
-      filter(duration_minutes < 440) |>  # Specify boundaries to remove outliers
-      ggplot(mapping = aes(x=duration_minutes, y=common_name))+
-      geom_point(size = 2, alpha = .5)+         
-      geom_smooth()+
-      theme_bw()+
-      labs(title = "Species over time")     # The majority of checklists see 
-    
-    
-    
-    # Average distance of a checklist (having removed extreme outliers)
-    May |>  
-      drop_na(effort_distance_km) |>  
-      filter(effort_distance_km < 15) |> 
-      summarise(Average = mean(effort_distance_km)) # 3.84 km
-    
-    # Visualise the range (and remove extremes)
-    May |> 
-      drop_na(effort_distance_km) |> 
-      filter(effort_distance_km <15) |> 
-      ggplot(mapping = aes(x= effort_distance_km))+
-      geom_histogram()
-    
-    
-    
-    # Which time of day has the highest number of species?
-    # Or, when will I likely see the most species?
-    
-   May |> 
-   filter(Year == "2022") |> 
-     filter(duration_minutes <360) |> 
-     filter(effort_distance_km < 15) |> 
-   group_by(common_name) |> 
-   ggplot(mapping = aes(x = time_observations_started))+
-   geom_bar()
-  # This may not be entirely useful as some checklists are many hours. Additionally, I would want to group the times incrimentally.
+    # The majority of checklists have 1-2 observers, but detection frequency increases 
+    # with more observers.
