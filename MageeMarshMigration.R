@@ -329,7 +329,7 @@
       group_by(common_name, sampling_event_identifier) |>  # group by common_name and duplicate checklists
       slice(1) |>                                          # choose 1 of the duplicates
       ungroup() |> 
-      #group_by(locality == "") OR group_by(year == "")      # further specify location or year for which frequencies will be calculated 
+      #group_by(locality == "") OR group_by(year == ####)      # further specify location or year for which frequencies will be calculated 
       mutate(lists = n_distinct(sampling_event_identifier)) |> # create a new column with the number of distinct checklists. This will be the number frequencies are divided by (the fraction denominator)
       #ungroup()                                               # use ungroup() if previous grouping occured, e.g. location or year      
       group_by(common_name) |>    #group_by(location, common_name) # group by common name to calculate frequency for each
@@ -349,13 +349,13 @@
         
 # VISUALISE THE DATA
     # Range of distributions for duration. Use a histogram for time scale data.
-    Magee |> 
+    MageeMarsh |> 
       drop_na(duration_minutes) |> 
       ggplot(mapping = aes(x= duration_minutes))+
       geom_histogram()
     
     # Remove extremes i.e. Select checklists less than 4 hours 
-    Magee |> 
+    MageeMarsh |> 
       drop_na(duration_minutes) |> 
       filter(duration_minutes < 240) |> 
       ggplot(mapping = aes(x = duration_minutes))+
@@ -363,7 +363,7 @@
     
     
    # Range of distribution for distance (and remove extremes)
-    Magee |> 
+    MageeMarsh |> 
       drop_na(effort_distance_km) |> 
       filter(effort_distance_km <15) |> 
       ggplot(mapping = aes(x= effort_distance_km))+
@@ -371,16 +371,28 @@
     
     
 
+  # Plot species across the month
+    # first create a dataframe with the day of month and species
+    
+    KW<-MageeMarsh |> 
+      #filter(year == ####)
+      filter(common_name == "Kirtland's Warbler") |> 
+      distinct(Daym, common_name)
+    
+    hist(KW$Daym, breaks = 0:31)
     
     
+   # For Blackburnian Warbler
+     BW<-MageeMarsh |> 
+       filter(Year == 2022) |> 
+      filter(common_name == "Blackburnian Warbler") |> 
+      distinct(Daym, common_name)
+    
+    hist(BW$Daym, breaks = 0:31)
     
     
-    
-    
-    
-    
-    
-    
+   
+      
     
     
     
