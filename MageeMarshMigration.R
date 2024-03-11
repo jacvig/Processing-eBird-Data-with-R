@@ -136,7 +136,7 @@
   # Combine observation and checklist data by removing observations without matching checklists
           # use semi_join to keep only columns from the observations dataset.
           # use inner_join to keep columns from both datasets.
-    # NB. This data frame will be used later to visualise the data later. See PRESENCE/ABSENCE ANAYLYSIS
+    # NB. This data frame will be used to visualise the data later. See PRESENCE/ABSENCE ANAYLYSIS
     df <- semi_join(observations, checklists, by = "checklist_id") 
 
     # write.csv(df, file = "df.csv")
@@ -177,19 +177,98 @@
        
     
 
-# EXPLORE THE DATA
-  # Convert Data column to three separate columns for day, month, year
+# PROCESS THE DATA
+  # Keep only wanted columns
+    
+  names(Magee)
+  
+  Magee<- Magee |> 
+    select(checklist_id,
+             global_unique_identifier,
+             common_name,
+             scientific_name,
+             observation_count,
+             locality,
+             latitude,
+             longitude,
+             observation_date,
+             time_observations_started,
+             observer_id,
+             sampling_event_identifier,
+             protocol_type,
+             duration_minutes,
+             effort_distance_km,
+             number_observers,
+             all_species_reported )
+    
+  
+    # Convert Data column to three separate columns for day, month, year
     
   Magee <-Magee |>  
     separate(observation_date, c("Year", "Month", "Day"), "-")   # "-" This is the separator used in the dataframe
     
-  # Magee<- Magee |> 
-    unite(Date,5:7, remove = FALSE, sep = "-") #Use remove = TRUE to remove the separate columns
+  Magee<- Magee |> 
+    unite(observation_date,9:11, remove = FALSE, sep = "-") #Use remove = TRUE to remove the separate columns
+    
+    
+  #Add a new column that provides the cumulative numerical value for that day of the year
+  # Because 2020 was a leap year, I will split the data into two data frames, run the modified code on each data frame then knit them together again.
+  
+  #For years 2021, 2022, 2023
+  #Create a data frame for these years
+  Unleap<-Magee %>% 
+    filter(Year %in% c(2019, 2021, 2022, 2023))
+  
+  #Create two objects
+  days = c(31,28,31,30,31,30,31,31,30,31,30,31)  # Number of days in each month. 
+  cdays = c(0,31,59,90,120,151,181,212,243,273,304,334)
+  
+  
+  #Split the Date and add the new column with values
+  Unleap<-Unleap %>% 
+    mutate(observation_date = as.Date(observation_date),   #The column Date needs to be in the data for this to work.
+           Year = year(observation_date),
+           Month = month(observation_date),
+           Daym = day(observation_date),
+           Dayc = day(observation_date) + cdays[Month])
+  
+  
+  
+  
+  #Do the same for 2020. Separate 2020 as it's own data frame
+  Leap<-Magee %>% 
+    filter(Year == 2020)
+  
+  dayleap = c(31,29,31,30,31,30,31,31,30,31,30,31)  # February 2020 needs 29 days 
+  cdayleap = c(0,32,60,91,121,152,182,213,244,274,305,335) #Each month thereafter will be +1 days
+  
+  #Add columns and values into the data frame
+  Leap<- Leap %>% 
+    mutate(observation_date = as.Date(observation_date),
+           Year = year(observation_date),
+           Month = month(observation_date),
+           Daym = day(observation_date),
+           Dayc = day(observation_date) + cdayleap[Month]) #It doesn't seem to matter that the object dayleap was created.
+  
+  
+  
+  #Combine the two into a new data frame
+  MageeMarsh <-rbind(Unleap, Leap)
+    
+    
+   # Convert the column Count to a numeric vector
+    MageeMarsh$observation_count<-as.numeric(MageeMarsh$observation_count) # If you get the error "NAs introduced by coercion", you can ignore.
+    
+   # Check the column vectors
+    str(MageeMarsh)
+    
+    write.csv(MageeMarsh, file = "Mageemarsh.csv")
     
     
     
+# EXPLORE THE DATA    
   # Which years reported had the most species?
-      Magee |> 
+      MageeMarsh |> 
         group_by(Year) |>  
         summarise(species = n_distinct(common_name))
       
@@ -198,23 +277,18 @@
       # 3 2021      224
       # 4 2022      225
       # 5 2023      218
-      
+    
+        
   # Which species were reported most and which species least? i.e. total number of observations for each species
   # Or, which birds am I most likely to see?
       
-    # Convert the column Count to a numeric vector
-      Magee$observation_count<-as.numeric(Magee$observation_count) # If you get the error "NAs introduced by coercion", you can ignore.
-      
-      # Check the column vectors
-      str(Magee) 
-      
       # Find and remove NAs from counts
-      which(is.na(Magee$observation_count), arr.ind=TRUE)
-      Magee<- Magee |> 
+      which(is.na(MageeMarsh$observation_count), arr.ind=TRUE)
+      MageeMarsh<- MageeMarsh |> 
         drop_na(observation_count)
       
     # Total number of each species
-    SpeciesList<- Magee |> 
+    SpeciesList<- MageeMarsh |> 
       group_by(common_name) |>  
       summarise(Total = sum(observation_count)) |>  
       arrange(-Total)
@@ -222,31 +296,57 @@
     write.csv(SpeciesList, file = "outputs/MageeSpeciesList.csv") 
       
     # Explore all records for a specific species
-    Magee |>  
+    MageeMarsh |>  
       filter(common_name == "Kirtland's Warbler") |> 
       View()
     
-    Magee |> 
+    MageeMarsh |> 
       filter(common_name == "Blackburnian Warbler") |> 
       View()
     
     # Most common duration of checklist i.e. mean
-    Magee |>  
+    MageeMarsh |>  
       drop_na(duration_minutes) |>  
       summarise(Length = median(duration_minutes)) # 90 minutes
     
     # Average duration of a checklist i.e. median
-    Magee |>  
+    MageeMarsh |>  
       drop_na(duration_minutes) |>  
       summarise(Average = mean(duration_minutes)) # 113 minutes
     
     # Average distance of a checklist (having removed extreme outliers)
-    Magee |>  
+    MageeMarsh |>  
       drop_na(effort_distance_km) |>  
       filter(effort_distance_km < 15) |> 
       summarise(Average = mean(effort_distance_km)) # 4.45 km
 
+
     
+    # Frequencies of common species, i.e. the percentage a species occurs in the checklists
+    
+    Mageefq<- MageeMarsh |> 
+      # filter(all_species_reported = TRUE) |>             # only complete checklists. Use if auk_complete() was not an original filter
+      group_by(common_name, sampling_event_identifier) |>  # group by common_name and duplicate checklists
+      slice(1) |>                                          # choose 1 of the duplicates
+      ungroup() |> 
+      #group_by(locality == "") OR group_by(year == "")      # further specify location or year for which frequencies will be calculated 
+      mutate(lists = n_distinct(sampling_event_identifier)) |> # create a new column with the number of distinct checklists. This will be the number frequencies are divided by (the fraction denominator)
+      #ungroup()                                               # use ungroup() if previous grouping occured, e.g. location or year      
+      group_by(common_name) |>    #group_by(location, common_name) # group by common name to calculate frequency for each
+      summarise(freq = n()/max(lists)) |>                      # number of each species divided by total number of checklists
+      arrange(desc(freq))  
+      
+    #> common_name            freq
+    #1 Red-winged Blackbird    0.77483893    # 77% of checklists report this species in May 
+    #2 Yellow Warbler          0.69695942
+    #3 Canada Goose            0.68384763
+    #4 Tree Swallow            0.65728496
+    #5 Great Egret             0.63286990
+    
+    
+    write.csv(Mageefq, file = "outputs/SpeciesFrequency_Magee.csv")
+    
+        
 # VISUALISE THE DATA
     # Range of distributions for duration. Use a histogram for time scale data.
     Magee |> 
@@ -270,7 +370,21 @@
       geom_histogram()
     
     
+
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
     
 # PRESENCE/ABSENCE ANAYLYSIS
     

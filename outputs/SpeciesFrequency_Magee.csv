@@ -1,0 +1,248 @@
+"","common_name","freq"
+"1","Red-winged Blackbird",0.774838928450322
+"2","Yellow Warbler",0.696959421272748
+"3","Canada Goose",0.683847631965638
+"4","Tree Swallow",0.657284955352097
+"5","Great Egret",0.632869899400927
+"6","American Robin",0.597038544139256
+"7","Great Blue Heron",0.518028710297276
+"8","Northern Cardinal",0.48875324968916
+"9","Bald Eagle",0.487962021024076
+"10","Gray Catbird",0.479484571041031
+"11","Common Grackle",0.456538939753589
+"12","Song Sparrow",0.426811348479711
+"13","Barn Swallow",0.423646433819374
+"14","Purple Martin",0.417881767830903
+"15","Trumpeter Swan",0.409630383180739
+"16","Killdeer",0.388380241889906
+"17","Baltimore Oriole",0.386571719226857
+"18","Blue Jay",0.378659432576014
+"19","Common Yellowthroat",0.374364191251272
+"20","House Wren",0.369390753927885
+"21","Mallard",0.356052899287894
+"22","European Starling",0.336046117327908
+"23","Double-crested Cormorant",0.3157002373686
+"24","Warbling Vireo",0.308466146716401
+"25","American Goldfinch",0.293432802079801
+"26","Yellow-rumped Warbler",0.268678648129309
+"27","Blue-gray Gnatcatcher",0.2555668588222
+"28","Eastern Kingbird",0.245054820843224
+"29","Mourning Dove",0.233864586865604
+"30","Brown-headed Cowbird",0.224935006216797
+"31","Palm Warbler",0.219057307561885
+"32","Turkey Vulture",0.216570588900192
+"33","American Redstart",0.203119701593761
+"34","Sandhill Crane",0.201650276930033
+"35","Downy Woodpecker",0.197128970272409
+"36","Indigo Bunting",0.188651520289364
+"37","Northern Flicker",0.181417429637165
+"38","White-throated Sparrow",0.170114162993105
+"39","Ruby-crowned Kinglet",0.170001130326664
+"40","Red-bellied Woodpecker",0.168983836328699
+"41","Pied-billed Grebe",0.167966542330734
+"42","Wood Duck",0.162993105007347
+"43","Magnolia Warbler",0.159036961681926
+"44","Prothonotary Warbler",0.14841189103651
+"45","Black-throated Green Warbler",0.147620662371425
+"46","Northern Parula",0.14660336837346
+"47","White-crowned Sparrow",0.143777551712445
+"48","Nashville Warbler",0.136656493726687
+"49","Blue-winged Teal",0.13541313439584
+"50","Black-throated Blue Warbler",0.132926415734147
+"51","Chestnut-sided Warbler",0.132248219735504
+"52","Rose-breasted Grosbeak",0.12976150107381
+"53","Great Crested Flycatcher",0.127161749745677
+"54","American Coot",0.126596586413473
+"55","Black-capped Chickadee",0.124561998417543
+"56","Black-and-white Warbler",0.124448965751102
+"57","American White Pelican",0.12410986775178
+"58","Red-tailed Hawk",0.121284051090765
+"59","Bay-breasted Warbler",0.120492822425681
+"60","Swainson's Thrush",0.119701593760597
+"61","Dunlin",0.117440940431785
+"62","Blackburnian Warbler",0.116988809766022
+"63","Sora",0.115406352435854
+"64","Marsh Wren",0.109641686447383
+"65","Green Heron",0.108850457782299
+"66","Tennessee Warbler",0.108850457782299
+"67","Red-eyed Vireo",0.105120379789759
+"68","Cape May Warbler",0.101729399796541
+"69","Common Gallinule",0.100599073132135
+"70","Eastern Phoebe",0.0993557138012886
+"71","Ring-billed Gull",0.0964168644738329
+"72","House Sparrow",0.0963038318073923
+"73","Lesser Yellowlegs",0.0922346558155307
+"74","Swamp Sparrow",0.0905391658189217
+"75","White-breasted Nuthatch",0.0902000678195999
+"76","Snowy Egret",0.0900870351531593
+"77","Eastern Wood-Pewee",0.0816095851701142
+"78","Veery",0.0803662258392675
+"79","Tufted Titmouse",0.0794619645077427
+"80","Scarlet Tanager",0.0739233638521533
+"81","Brown Thrasher",0.0724539391884255
+"82","Carolina Wren",0.0715496778569006
+"83","Red-headed Woodpecker",0.0700802531931728
+"84","Chipping Sparrow",0.0683847631965638
+"85","Ruby-throated Hummingbird",0.067480501865039
+"86","Least Flycatcher",0.0668023058663954
+"87","Greater Yellowlegs",0.0661241098677518
+"88","Blackpoll Warbler",0.0634113258731774
+"89","Blue-headed Vireo",0.0601333785463999
+"90","Willow Flycatcher",0.0597942805470781
+"91","Common Tern",0.0592291172148751
+"92","Red-breasted Nuthatch",0.0583248558833503
+"93","Wood Thrush",0.0569684638860631
+"94","Chimney Swift",0.0561772352209789
+"95","Northern Rough-winged Swallow",0.0561772352209789
+"96","Ovenbird",0.0561772352209789
+"97","Semipalmated Plover",0.0549338758901322
+"98","Wilson's Warbler",0.054707810557251
+"99","Field Sparrow",0.0543687125579292
+"100","Northern Waterthrush",0.0536905165592856
+"101","Herring Gull",0.053577483892845
+"102","Spotted Sandpiper",0.0522210918955578
+"103","Eastern Screech-Owl",0.051316830564033
+"104","Caspian Tern",0.047360687238612
+"105","Solitary Sandpiper",0.047360687238612
+"106","Canada Warbler",0.0452130665762405
+"107","American Crow",0.0439697072453939
+"108","House Finch",0.0400135639199729
+"109","Least Sandpiper",0.0378659432576014
+"110","Great Horned Owl",0.0376398779247202
+"111","Osprey",0.0352661919294676
+"112","Cliff Swallow",0.034587995930824
+"113","Orchard Oriole",0.034587995930824
+"114","Hermit Thrush",0.032892505934215
+"115","Cooper's Hawk",0.0321012772691308
+"116","Lincoln's Sparrow",0.0319882446026902
+"117","Cedar Waxwing",0.0316491466033684
+"118","Hairy Woodpecker",0.0297275912738782
+"119","Northern Shoveler",0.0284842319430315
+"120","Gadwall",0.0281451339437097
+"121","Philadelphia Vireo",0.0275799706115067
+"122","Common Nighthawk",0.0274669379450661
+"123","Mourning Warbler",0.0267887419464225
+"124","Forster's Tern",0.0265626766135413
+"125","Blue-winged Warbler",0.0249802192833729
+"126","American Woodcock",0.0240759579518481
+"127","Mute Swan",0.0233977619532045
+"128","Eastern Towhee",0.0226065332881203
+"129","American Kestrel",0.0209110432915112
+"130","Eastern Whip-poor-will",0.02068497795863
+"131","Eastern Bluebird",0.0205719452921894
+"132","Virginia Rail",0.0205719452921894
+"133","Black-billed Cuckoo",0.0198937492935458
+"134","Gray-cheeked Thrush",0.0183112919633774
+"135","Pine Warbler",0.0183112919633774
+"136","Belted Kingfisher",0.0177461286311744
+"137","Hooded Merganser",0.0169548999660902
+"138","Bank Swallow",0.0158245733016842
+"139","White-eyed Vireo",0.015598507968803
+"140","Rusty Blackbird",0.0154854753023624
+"141","Yellow-throated Vireo",0.0152594099694812
+"142","Yellow-billed Cuckoo",0.0149203119701594
+"143","Northern Harrier",0.0145812139708376
+"144","Alder Flycatcher",0.0142421159715158
+"145","Sharp-shinned Hawk",0.0140160506386346
+"146","Hooded Warbler",0.0137899853057534
+"147","Semipalmated Sandpiper",0.0137899853057534
+"148","Short-billed Dowitcher",0.0136769526393128
+"149","Black-bellied Plover",0.0132248219735504
+"150","Bonaparte's Gull",0.0126596586413473
+"151","Black-crowned Night Heron",0.0124335933084661
+"152","Eastern Meadowlark",0.0117553973098225
+"153","Savannah Sparrow",0.0106250706454165
+"154","Green-winged Teal",0.0103990053125353
+"155","American Wigeon",0.0102859726460947
+"156","Northern Mockingbird",0.0102859726460947
+"157","Pectoral Sandpiper",0.0101729399796541
+"158","Orange-crowned Warbler",0.00915564598168871
+"159","Yellow-bellied Flycatcher",0.00915564598168871
+"160","Black-necked Stilt",0.0085904826494857
+"161","Horned Lark",0.0082513846501639
+"162","Northern Pintail",0.00768622131796089
+"163","Ruddy Duck",0.00768622131796089
+"164","Acadian Flycatcher",0.00689499265287668
+"165","Lesser Scaup",0.00632982932067367
+"166","Wilson's Snipe",0.00621679665423307
+"167","Golden-winged Warbler",0.00610376398779247
+"168","Broad-winged Hawk",0.00599073132135187
+"169","American Pipit",0.00587769865491127
+"170","Least Bittern",0.00587769865491127
+"171","Yellow-bellied Sapsucker",0.00576466598847067
+"172","Purple Finch",0.00553860065558946
+"173","Winter Wren",0.00531253532270826
+"174","Olive-sided Flycatcher",0.00519950265626766
+"175","Red-shouldered Hawk",0.00519950265626766
+"176","Henslow's Sparrow",0.00497343732338646
+"177","Summer Tanager",0.00497343732338646
+"178","American Bittern",0.00440827399118345
+"179","Brown Creeper",0.00429524132474285
+"180","Peregrine Falcon",0.00418220865830225
+"181","American Golden-Plover",0.00406917599186165
+"182","Rock Pigeon",0.00406917599186165
+"183","Horned Grebe",0.00384311065898045
+"184","Yellow-breasted Chat",0.00384311065898045
+"185","American Black Duck",0.00361704532609924
+"186","Ring-necked Duck",0.00361704532609924
+"187","Golden-crowned Kinglet",0.00350401265965864
+"188","Connecticut Warbler",0.00316491466033684
+"189","Sedge Wren",0.00316491466033684
+"190","Marbled Godwit",0.00305188199389624
+"191","Bufflehead",0.00293884932745563
+"192","Long-billed Dowitcher",0.00282581666101503
+"193","Red-breasted Merganser",0.00282581666101503
+"194","Dark-eyed Junco",0.00271278399457443
+"195","Worm-eating Warbler",0.00259975132813383
+"196","Clay-colored Sparrow",0.00248671866169323
+"197","Western Cattle Egret",0.00248671866169323
+"198","Cerulean Warbler",0.00237368599525263
+"199","Prairie Warbler",0.00226065332881203
+"200","American Tree Sparrow",0.00214762066237143
+"201","Bobolink",0.00203458799593082
+"202","Redhead",0.00203458799593082
+"203","Common Merganser",0.00192155532949022
+"204","Grasshopper Sparrow",0.00192155532949022
+"205","Merlin",0.00192155532949022
+"206","Swainson's Hawk",0.00192155532949022
+"207","Wild Turkey",0.00192155532949022
+"208","Wilson's Phalarope",0.00192155532949022
+"209","Black Tern",0.00180852266304962
+"210","Neotropic Cormorant",0.00180852266304962
+"211","Common Loon",0.00169548999660902
+"212","Pileated Woodpecker",0.00169548999660902
+"213","White-rumped Sandpiper",0.00169548999660902
+"214","Pine Siskin",0.00146942466372782
+"215","Yellow-headed Blackbird",0.00135639199728722
+"216","Snow Goose",0.00101729399796541
+"217","Willet",0.00101729399796541
+"218","Kirtland's Warbler",0.000904261331524811
+"219","Ruddy Turnstone",0.000904261331524811
+"220","Sanderling",0.000904261331524811
+"221","Blue Grosbeak",0.000565163332203007
+"222","Dickcissel",0.000565163332203007
+"223","Rough-legged Hawk",0.000565163332203007
+"224","Fox Sparrow",0.000452130665762405
+"225","Kentucky Warbler",0.000452130665762405
+"226","Common Goldeneye",0.000339097999321804
+"227","Graylag Goose",0.000339097999321804
+"228","Louisiana Waterthrush",0.000339097999321804
+"229","Western Meadowlark",0.000339097999321804
+"230","Barn Owl",0.000226065332881203
+"231","Canvasback",0.000226065332881203
+"232","Curlew Sandpiper",0.000226065332881203
+"233","Evening Grosbeak",0.000226065332881203
+"234","Glossy Ibis",0.000226065332881203
+"235","Lark Sparrow",0.000226065332881203
+"236","Red-necked Phalarope",0.000226065332881203
+"237","Ring-necked Pheasant",0.000226065332881203
+"238","Vesper Sparrow",0.000226065332881203
+"239","American Avocet",0.000113032666440601
+"240","Barred Owl",0.000113032666440601
+"241","Bell's Vireo",0.000113032666440601
+"242","Franklin's Gull",0.000113032666440601
+"243","Great Black-backed Gull",0.000113032666440601
+"244","Lapland Longspur",0.000113032666440601
+"245","Lesser Black-backed Gull",0.000113032666440601
+"246","Nelson's Sparrow",0.000113032666440601
+"247","Yellow-throated Warbler",0.000113032666440601
