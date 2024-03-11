@@ -374,13 +374,13 @@
     
 
   # Plot species across the month
-    # first create a dataframe with the day of month and species
+    # create a dataframe with the day of month and species
     
     KW<-MageeMarsh |> 
       #filter(year == ####)
       filter(common_name == "Kirtland's Warbler") |> 
       distinct(Daym, common_name)
-    
+    # plot
     hist(KW$Daym, breaks = 0:31)
     
     
@@ -392,29 +392,38 @@
     
     hist(BW$Daym, breaks = 0:31)
     
+    # Or
+    BW<- MageeMarsh |> 
+      filter(common_name == "Blackburnian Warbler") |> 
+      filter(Year== 2019) |> 
+      group_by(Daym) |> 
+      summarise(count = n_distinct(observation_count)) |> 
+      ungroup()
+    
+    barplot(BW$count,BW$Daym, width = 2, space = NULL)
+    
    
   # Magnolia Warbler
     MW<- MageeMarsh |> 
       filter(common_name == "Magnolia Warbler") |> 
-      filter(Year== 2022) |> 
+      filter(Year== 2019) |> 
       group_by(Daym) |> 
       summarise(count = n_distinct(observation_count)) |> 
       ungroup()
     
     barplot(MW$count,MW$Daym, width = 2, space = NULL)
     
+
+    # This is not currently working
+    MageeMarsh |> 
+      filter(common_name == "Magnolia Warbler") |> 
+      group_by(Year, Daym) |> 
+      summarise(total = n_distinct(observation_count)) |>
+      ggplot(mapping=aes(x=Daym))+
+      geom_bar()+
+      facet_wrap(~Year)
     
-    
-   # MageeMarsh |> 
-    #  filter(common_name == "Magnolia Warbler") |> 
-    #  group_by(Daym) |> 
-    #  summarise(count = n_distinct(observation_count)) |> 
-    #  ungroup() |> 
-    #  ggplot(aes(x = Daym))+
-    #  geom_histogram(bins = 31)+
-    #  facet_wrap(Year)
-    
-    
+
     
     
         
