@@ -6,6 +6,8 @@
 # T. Auer, S. Kelling, D. Fink, A. Johnston. 2023. Best Practices for Using eBird Data. 
 # Version 2.0. https://ebird.github.io/ebird-best-practices/. Cornell Lab of Ornithology, 
 # Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
+# and
+# Bird Count India. 2021. Analysing eBird data using R- Part 1. https://www.youtube.com/watch?v=jBGVy7K7dH8
 
 # DOWNLOAD DATA
   # Request and download data from eBird
@@ -390,9 +392,28 @@
     
     hist(BW$Daym, breaks = 0:31)
     
-    
    
-      
+  # Magnolia Warbler
+    MW<- MageeMarsh |> 
+      filter(common_name == "Magnolia Warbler") |> 
+      filter(Year== 2022) |> 
+      group_by(Daym) |> 
+      summarise(count = n_distinct(observation_count)) |> 
+      ungroup()
+    
+    barplot(MW$count,MW$Daym, width = 2, space = NULL)
+    
+    
+    
+   # MageeMarsh |> 
+    #  filter(common_name == "Magnolia Warbler") |> 
+    #  group_by(Daym) |> 
+    #  summarise(count = n_distinct(observation_count)) |> 
+    #  ungroup() |> 
+    #  ggplot(aes(x = Daym))+
+    #  geom_histogram(bins = 31)+
+    #  facet_wrap(Year)
+    
     
     
     
