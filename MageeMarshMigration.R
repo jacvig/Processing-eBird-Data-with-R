@@ -373,27 +373,18 @@
     
     
 
-  # Plot species across the month
-    # create a dataframe with the day of month and species
+  # Plot a species occurance across the month to get an idea which day/week it is most common
     
-    KW<-MageeMarsh |> 
-      #filter(year == ####)
+    # create a dataframe with the day of month and species
+    KW<-MageeMarsh |>        # KW is so seldom seen, that this plot works well.
       filter(common_name == "Kirtland's Warbler") |> 
       distinct(Daym, common_name)
     # plot
     hist(KW$Daym, breaks = 0:31)
     
     
-   # For Blackburnian Warbler
-     BW<-MageeMarsh |> 
-       filter(Year == 2022) |> 
-      filter(common_name == "Blackburnian Warbler") |> 
-      distinct(Daym, common_name)
-    
-    hist(BW$Daym, breaks = 0:31)
-    
-    # Or
-    BW<- MageeMarsh |> 
+   # For Blackburnian Warbler 
+     BW<- MageeMarsh |> 
       filter(common_name == "Blackburnian Warbler") |> 
       filter(Year== 2019) |> 
       group_by(Daym) |> 
@@ -413,20 +404,28 @@
     
     barplot(MW$count,MW$Daym, width = 2, space = NULL)
     
-
-    # This is not currently working
-    MageeMarsh |> 
+  # Or, for each year
+    MW<- MageeMarsh |> 
       filter(common_name == "Magnolia Warbler") |> 
       group_by(Year, Daym) |> 
-      summarise(total = n_distinct(observation_count)) |>
-      ggplot(mapping=aes(x=Daym))+
-      geom_bar()+
-      facet_wrap(~Year)
+      summarise(count = n_distinct(observation_count)) |> 
+      ungroup()
+
+    ggplot(MW, aes(x = Daym, y = count)) +
+      geom_bar(stat = "identity", breaks = 0:31) +    
+      facet_wrap(~Year) +
+      labs(title = "Number of Magnolia Warbler Observations by Day",
+          x = "Day of Month",
+          y = "Count") +
+      theme_bw()
     
 
     
     
-        
+    
+
+    
+    
     
 # PRESENCE/ABSENCE ANAYLYSIS
     
