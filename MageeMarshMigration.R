@@ -403,7 +403,7 @@
       filter(common_name == "Kirtland's Warbler") |> 
       distinct(Daym, common_name)
     # plot
-    hist(KW$Daym, breaks = 0:31)
+    hist(KW$Daym, breaks = 0:31, main = "Kirtland's Warbler observations across May")
     
     
    # For Blackburnian Warbler 
