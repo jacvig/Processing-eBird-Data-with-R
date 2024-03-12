@@ -314,10 +314,12 @@
       arrange(taxonomic_order) |> 
       distinct(common_name)
    
-    
+    write.csv(Taxon, file = "outputs/MageeMarshTaxon.csv")
  
     
-         
+
+    
+             
     # Explore all records for a specific species
     MageeMarsh |>  
       filter(common_name == "Kirtland's Warbler") |> 
