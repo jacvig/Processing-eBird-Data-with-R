@@ -188,6 +188,7 @@
     select(checklist_id,
              global_unique_identifier,
              common_name,
+             taxonomic_order,
              scientific_name,
              observation_count,
              locality,
@@ -296,7 +297,27 @@
       arrange(-Total)
     
     write.csv(SpeciesList, file = "outputs/MageeSpeciesList.csv") 
-      
+    
+    
+
+       
+       
+   # Create a species list in taxonomic order. NB eBird uses the Clements taxon
+    # Arrange by taxonomic order
+    
+    Taxon<- MageeMarsh |> 
+      select(taxonomic_order,
+             scientific_name,
+             common_name)
+    
+    Taxon <- Taxon |> 
+      arrange(taxonomic_order) |> 
+      distinct(common_name)
+   
+    
+ 
+    
+         
     # Explore all records for a specific species
     MageeMarsh |>  
       filter(common_name == "Kirtland's Warbler") |> 
@@ -373,7 +394,7 @@
     
     
 
-  # Plot a species occurance across the month to get an idea which day/week it is most common
+  # Plot a species occurrence across the month to get an idea which day/week it is most common
     
     # create a dataframe with the day of month and species
     KW<-MageeMarsh |>        # KW is so seldom seen, that this plot works well.
@@ -392,7 +413,7 @@
       ungroup()
     
     barplot(BW$count,BW$Daym, width = 2, space = NULL)
-    
+  
    
   # Magnolia Warbler
     MW<- MageeMarsh |> 
@@ -414,14 +435,28 @@
     ggplot(MW, aes(x = Daym, y = count)) +
       geom_bar(stat = "identity", breaks = 0:31) +    
       facet_wrap(~Year) +
-      labs(title = "Number of Magnolia Warbler Observations by Day",
+      labs(title = "Number of Magnolia Warbler Observations across May",
           x = "Day of Month",
           y = "Count") +
       theme_bw()
     
 
+   # Black and White Warbler 
+    BWW<- MageeMarsh |> 
+      filter(common_name == "Black-and-white Warbler") |> 
+      group_by(Year, Daym) |> 
+      summarise(count = n_distinct(observation_count)) |> 
+      ungroup()
     
+    ggplot(BWW, aes(x = Daym, y = count)) +
+      geom_bar(stat = "identity", breaks = 0:31) +    
+      facet_wrap(~Year) +
+      labs(title = "Number of Black and White Warbler observations across May",
+           x = "Day of Month",
+           y = "Count") +
+      theme_bw() 
     
+
     
 
     
