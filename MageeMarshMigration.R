@@ -1,5 +1,5 @@
 # Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
-# e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see each species across each week in May
+# e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see species across each day in May
 
 # This code is adapted from Chapter 2, eBird Data of:
 # Strimas-Mackey, M., W.M. Hochachka, V. Ruiz-Gutierrez, O.J. Robinson, E.T. Miller, 
@@ -8,6 +8,7 @@
 # Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
 # and
 # Bird Count India. 2021. Analysing eBird data using R- Part 1. https://www.youtube.com/watch?v=jBGVy7K7dH8
+
 
 # DOWNLOAD DATA
   # Request and download data from eBird
@@ -460,7 +461,24 @@
     
 
     
+  # Plot total number of species seen across each day
+    Tot<-MageeMarsh |> 
+      group_by(Year, Daym) |> 
+      summarise(species = n_distinct(common_name)) |> 
+      ungroup()
+    
+    ggplot(Tot, aes(x= Daym, y = species))+
+      geom_bar(stat = "identity")+
+      facet_wrap(~Year)+
+      labs(title = "Unique species observations across May",
+           x= "Day of month",
+           y= "Number of species")+
+      theme_bw()
+    
 
+    
+    
+    
     
     
     
