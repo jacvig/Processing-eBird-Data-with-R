@@ -1,13 +1,13 @@
 # Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
 # e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see species across each day in May
 
-# This code is adapted from Chapter 2, eBird Data of:
-# Strimas-Mackey, M., W.M. Hochachka, V. Ruiz-Gutierrez, O.J. Robinson, E.T. Miller, 
-# T. Auer, S. Kelling, D. Fink, A. Johnston. 2023. Best Practices for Using eBird Data. 
-# Version 2.0. https://ebird.github.io/ebird-best-practices/. Cornell Lab of Ornithology, 
-# Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
-# and
-# Bird Count India. 2021. Analysing eBird data using R- Part 1. https://www.youtube.com/watch?v=jBGVy7K7dH8
+   # This code is adapted from Chapter 2, eBird Data of:
+   # Strimas-Mackey, M., W.M. Hochachka, V. Ruiz-Gutierrez, O.J. Robinson, E.T. Miller, 
+   # T. Auer, S. Kelling, D. Fink, A. Johnston. 2023. Best Practices for Using eBird Data. 
+   # Version 2.0. https://ebird.github.io/ebird-best-practices/. Cornell Lab of Ornithology, 
+   # Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
+   # and
+   # Bird Count India. 2021. Analysing eBird data using R- Part 1. https://www.youtube.com/watch?v=jBGVy7K7dH8
 
 
 # DOWNLOAD DATA
@@ -49,7 +49,7 @@
   
   # Set your working directory
   getwd() # See which directory you are currently in
-  setwd("C:/Users/jacvig/OneDrive - The University of Liverpool/R/Processing-eBird-Data-with-R/data/ebd_US-OH_201905_202305_smp_relDec-2023") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
+  setwd("filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
   # OR set path with auk if AWK is installed in a non-standard location
   # auk::auk_set_awk_path("/filepath", overwrite = TRUE)
