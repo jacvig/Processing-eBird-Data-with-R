@@ -1,12 +1,14 @@
 # Visualise eBird data for a specific location to predict what species are most likely to be seen at a specific time.
 # e.g. Spring migration (May), Magee Marsh, Ohio between 2019-2023 i.e. what is the likelihood I'll see species across each day in May
 
-   # This code is adapted from Chapter 2, eBird Data of:
+   # This code is adapted from Chapter 2 of:
    # Strimas-Mackey, M., W.M. Hochachka, V. Ruiz-Gutierrez, O.J. Robinson, E.T. Miller, 
    # T. Auer, S. Kelling, D. Fink, A. Johnston. 2023. Best Practices for Using eBird Data. 
    # Version 2.0. https://ebird.github.io/ebird-best-practices/. Cornell Lab of Ornithology, 
    # Ithaca, New York. https://doi.org/10.5281/zenodo.3620739
-   # and
+   
+   # AND
+
    # Bird Count India. 2021. Analysing eBird data using R- Part 1. https://www.youtube.com/watch?v=jBGVy7K7dH8
 
 
@@ -25,14 +27,15 @@
   # In the EBD, each row corresponds to a single species in a checklist, and includes species-level information.
   # In the SED, each row corresponds to a checklist and includes checklist-level information.
   # They can be joined together using the checklist id. 
-  # However, not all analysis requires both datasets.
+  # However, not all analysis requires both datasets.This code uses both the individual EBD dataset and the combined dataset. 
 
 
 
 # INSTALL PACKAGES
   # Due to the large size of eBird datasets, you may need to install the Unix command-line utility AWK.
-  # First install Cygwin
+  # You may first need to install Cygwin: https://cygwin.com/ 
   # Then install R packages including the R package auk 
+  # See https://ebird.github.io/ebird-best-practices/ for detailed guidance
 
   # if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
@@ -40,6 +43,8 @@
   # remotes::install_github("ebird/ebird-best-practices")
 
   install.packages("tidyverse")
+  
+  # Add packages
   library(tidyverse) # Group of packages for data manipulation, exploration, and visualisation. Includes dplyr, ggplot
   library(auk)       # To work with huge eBird datasets
   library(lubridate) # To work with dates
@@ -49,31 +54,32 @@
   
   # Set your working directory
   getwd() # See which directory you are currently in
-  setwd("filepath") #To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
+  setwd("filepath") # To set the working directory, copy the pathway into the setwd() function. Be sure to use "" and change \ -> /
 
-  # OR set path with auk if AWK is installed in a non-standard location
+  # OR set path with auk if AWK is installed in a non-standard location 
   # auk::auk_set_awk_path("/filepath", overwrite = TRUE)
 
 
 
-# IMPORT DATA. Because the EBD file is so large, the auk auk package is required.
+# IMPORT DATA. Because the EBD file is so large, the auk package is required to import the data.
   # There are two ways to approach importing the EBD data:
   # A. filter before importing. This is useful if the data set is huge.
   # B. import and then filter. Can be useful to explore the data before deciding on filters.
-  # NB. If you intend to combine the EBD and SED data, you need to filter in the exact same way.
+  # NB. If you intend to combine the EBD and SED data, you need to filter both in the exact same way.
  
   # Inspect the files
   ebd_top<-read_tsv("ebd_US-OH_201905_202305_smp_relDec-2023.txt", n_max = 5)
   
 # A. Filter before importing the observation data (EBD)
   auk_ebd("ebd_US-OH_201905_202305_smp_relDec-2023.txt") |>   # use auk_sampling for the SED file
-    # auk_county("Ottawa") |>                         # I couldn't get this filter to work. So I ran this afterwards.
-    auk_date(c("*-05-01", "*-05-31")) |>              # filter by a specific date range or choose specific dates across all years e.g. only checklists from May.
+    # auk_county("Ottawa") |>                                 # I couldn't get this filter to work. So I ran this afterwards.
+    auk_date(c("*-05-01", "*-05-31")) |>                      # filter by a specific date range or choose specific dates across all years e.g. only checklists from May.
     auk_protocol(c("Traveling", "Stationary")) |> 
-    auk_complete() |>                                 # only complete checklists
+    auk_complete() |>                                         # only complete checklists
     auk_filter(file = "ebird_filter.txt", overwrite = TRUE) # can write it directly to a file
   
-  data<- read_ebd("ebird_filter.txt", unique = FALSE, rollup = FALSE) # to specify if shared checklists and taxonomic levels will not be collapsed.
+  data<- read_ebd("ebird_filter.txt", unique = FALSE, rollup = FALSE) # auk automatically performs taxonomic roll-up (collapses taxonomy to species-level. See https://ebird.github.io/ebird-best-practices/ebird.html
+                                                                      # to specify if shared checklists and taxonomic levels will not be collapsed, use rollup = FALSE.
 
   
   # Filter EBD by location
@@ -128,7 +134,7 @@
              month(observation_date) == 5,
              county == "Ottawa")   
     
-          write.csv(checklists, file = "checklists.csv")   # It can be best practice to write large data objects as csv files to read-in for each new session so there is no need to save or run them again. 
+          write.csv(checklists, file = "checklists.csv")   # It can be best practice to write large data objects as csv files to read-in for each new session so there is no need to save objects in the RStudio environment or run them again. 
           write.csv(observations, file = "observations.csv")
    
         # To read in
@@ -139,7 +145,7 @@
   # Combine observation and checklist data by removing observations without matching checklists
           # use semi_join to keep only columns from the observations dataset.
           # use inner_join to keep columns from both datasets.
-    # NB. This data frame will be used to visualise the data later. See PRESENCE/ABSENCE ANAYLYSIS
+    # NB. This data frame will be used to visualise the data later, but I will create it now. See PRESENCE/ABSENCE ANAYLYSIS
     df <- semi_join(observations, checklists, by = "checklist_id") 
 
     # write.csv(df, file = "df.csv")
@@ -151,13 +157,13 @@
     # See all localities
     unique(observations$locality)
     
-    # I want only checklists from the Magee Marsh area, but there are a lot of sub-localities with various names.
+    # I want only checklists from the Magee Marsh area, but there are a lot of sub-localities (hotspots) with various names.
     # I will filter by multiple strings, that is, those localities containing specific words
     
     Magee<- observations |>  
       filter(grepl("Maumee Bay|Howard Marsh|Metzger Marsh|Ottawa NWR|Magee Marsh|Turtle|Black|Strange", locality)) #Be aware that spaces are counted in strings.
     
-    # Otherwise, I could have filtered by a single locality
+    # Otherwise, I could have filtered by a specific locality/hotspot
       # df<- df |> 
       # filter(locality == "Magee Marsh")
     
@@ -166,7 +172,8 @@
  # Create Species List
 
   # Total number of species
-    length(unique(Magee$common_name)) # 247
+    length(unique(Magee$common_name)) 
+      # 247
     
   # View list of unique species
     unique(Magee$common_name)
@@ -212,25 +219,25 @@
     separate(observation_date, c("Year", "Month", "Day"), "-")   # "-" This is the separator used in the dataframe
     
   Magee<- Magee |> 
-    unite(observation_date,9:11, remove = FALSE, sep = "-") #Use remove = TRUE to remove the separate columns
+    unite(observation_date,9:11, remove = FALSE, sep = "-") # Use remove = TRUE to remove the separate columns
     
     
   #Add a new column that provides the cumulative numerical value for that day of the year
   # Because 2020 was a leap year, I will split the data into two data frames, run the modified code on each data frame then knit them together again.
   
-  #For years 2021, 2022, 2023
+  #For years 2019, 2021, 2022, 2023
   #Create a data frame for these years
   Unleap<-Magee %>% 
     filter(Year %in% c(2019, 2021, 2022, 2023))
   
   #Create two objects
   days = c(31,28,31,30,31,30,31,31,30,31,30,31)  # Number of days in each month. 
-  cdays = c(0,31,59,90,120,151,181,212,243,273,304,334)
+  cdays = c(0,31,59,90,120,151,181,212,243,273,304,334) # cumulative number of days
   
   
   #Split the Date and add the new column with values
   Unleap<-Unleap %>% 
-    mutate(observation_date = as.Date(observation_date),   #The column Date needs to be in the data for this to work.
+    mutate(observation_date = as.Date(observation_date),
            Year = year(observation_date),
            Month = month(observation_date),
            Daym = day(observation_date),
@@ -244,7 +251,7 @@
     filter(Year == 2020)
   
   dayleap = c(31,29,31,30,31,30,31,31,30,31,30,31)  # February 2020 needs 29 days 
-  cdayleap = c(0,32,60,91,121,152,182,213,244,274,305,335) #Each month thereafter will be +1 days
+  cdayleap = c(0,32,60,91,121,152,182,213,244,274,305,335) # Each month thereafter will be +1 days
   
   #Add columns and values into the data frame
   Leap<- Leap %>% 
@@ -252,7 +259,7 @@
            Year = year(observation_date),
            Month = month(observation_date),
            Daym = day(observation_date),
-           Dayc = day(observation_date) + cdayleap[Month]) #It doesn't seem to matter that the object dayleap was created.
+           Dayc = day(observation_date) + cdayleap[Month]) 
   
   
   
@@ -277,7 +284,7 @@
         summarise(species = n_distinct(common_name))
       
       # 1 2019      215
-      # 2 2020      193
+      # 2 2020      193  # Covid year!
       # 3 2021      224
       # 4 2022      225
       # 5 2023      218
@@ -330,12 +337,12 @@
       filter(common_name == "Blackburnian Warbler") |> 
       View()
     
-    # Most common duration of checklist i.e. mean
+    # Most common duration of checklist i.e. median
     MageeMarsh |>  
       drop_na(duration_minutes) |>  
       summarise(Length = median(duration_minutes)) # 90 minutes
     
-    # Average duration of a checklist i.e. median
+    # Average duration of a checklist i.e. mean
     MageeMarsh |>  
       drop_na(duration_minutes) |>  
       summarise(Average = mean(duration_minutes)) # 113 minutes
@@ -355,15 +362,15 @@
       group_by(common_name, sampling_event_identifier) |>  # group by common_name and duplicate checklists
       slice(1) |>                                          # choose 1 of the duplicates
       ungroup() |> 
-      #group_by(locality == "") OR group_by(year == ####)      # further specify location or year for which frequencies will be calculated 
-      mutate(lists = n_distinct(sampling_event_identifier)) |> # create a new column with the number of distinct checklists. This will be the number frequencies are divided by (the fraction denominator)
-      #ungroup()                                               # use ungroup() if previous grouping occured, e.g. location or year      
+      #group_by(locality == "") OR group_by(year == ####)          # further specify location or year for which frequencies will be calculated 
+      mutate(lists = n_distinct(sampling_event_identifier)) |>     # create a new column with the number of distinct checklists. This will be the number frequencies are divided by (the fraction denominator)
+      #ungroup()                                                   # use ungroup() if previous grouping occurred, e.g. location or year      
       group_by(common_name) |>    #group_by(location, common_name) # group by common name to calculate frequency for each
-      summarise(freq = n()/max(lists)) |>                      # number of each species divided by total number of checklists
+      summarise(freq = n()/max(lists)) |>                          # number of each species divided by total number of checklists
       arrange(desc(freq))  
       
     #> common_name            freq
-    #1 Red-winged Blackbird    0.77483893    # 77% of checklists report this species in May 
+    #1 Red-winged Blackbird    0.77483893    # i.e. 77% of checklists report this species in May 
     #2 Yellow Warbler          0.69695942
     #3 Canada Goose            0.68384763
     #4 Tree Swallow            0.65728496
@@ -400,7 +407,7 @@
   # Plot a species occurrence across the month to get an idea which day/week it is most common
     
     # create a dataframe with the day of month and species
-    KW<-MageeMarsh |>        # KW is so seldom seen, that this plot works well.
+    KW<-MageeMarsh |>        # KW is so seldom seen that this plot works well.
       filter(common_name == "Kirtland's Warbler") |> 
       distinct(Daym, common_name)
     # plot
@@ -428,7 +435,7 @@
     
     barplot(MW$count,MW$Daym, width = 2, space = NULL)
     
-  # Or, for each year
+  # Magnolia Warbler across all years
     MW<- MageeMarsh |> 
       filter(common_name == "Magnolia Warbler") |> 
       group_by(Year, Daym) |> 
@@ -444,7 +451,7 @@
       theme_bw()
     
 
-   # Black and White Warbler 
+   # Black-and-white Warbler 
     BWW<- MageeMarsh |> 
       filter(common_name == "Black-and-white Warbler") |> 
       group_by(Year, Daym) |> 
@@ -454,7 +461,7 @@
     ggplot(BWW, aes(x = Daym, y = count)) +
       geom_bar(stat = "identity", breaks = 0:31) +    
       facet_wrap(~Year) +
-      labs(title = "Number of Black and White Warbler observations across May",
+      labs(title = "Number of Black-and-white Warbler observations across May",
            x = "Day of Month",
            y = "Count") +
       theme_bw() 
@@ -486,7 +493,7 @@
     
     # Combine and zerofill observation and checklist data. Shows presence/absence for a species
       # NB this only works if both dataframes have been filtered the same.
-         zf <- auk_zerofill(df, checklists, collapse = TRUE)   #This removes the common_name, but adds a species_observed variable
+         zf <- auk_zerofill(df, checklists, collapse = TRUE)   # This removes the common_name (not sure why), but adds a species_observed variable
 
          # write.csv(zf, file = "zf.csv")
         
@@ -573,7 +580,7 @@
 # Visualise detections for a specific species e.g. Kirtland's Warbler
 
 Kirtlands<-Ohiozf |> 
-  filter(scientific_name == "Setophaga kirtlandii") # Remember, many of these "observations" are absences
+  filter(scientific_name == "Setophaga kirtlandii") # Remember, many of these "observations" are absences because we zero-filled
     
 BlackBurn<- Ohiozf |> 
   filter(scientific_name == "Setophaga fusca")
